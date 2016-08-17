@@ -95,7 +95,7 @@ Properties readPropsFile(File fProps) {
 
  if (!fProps.exists()) {
      throw new GradleException(
-     "Required broker file does not exist: $fProps.canonicalPath")
+     "Required properties file does not exist: $fProps.canonicalPath")
  }
   Properties props = new Properties()
   fProps.withInputStream { stream -> props.load(stream) }
