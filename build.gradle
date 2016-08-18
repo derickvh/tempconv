@@ -22,7 +22,7 @@ if (org.gradle.internal.os.OperatingSystem.current().windows) {
         ant.properties['mqsi.deploy'] = 'mqsideploy.exe'
         ant.properties['mqsi.createbar'] = 'mqsicreatebar.exe'
         ant.properties['iib.path'] = ext.mqsiprofilePathWin
-        ant.properties['soapui.exec'] = ext.soapUIPathWin + '\testrunner.bat'
+        ant.properties['soapui.exec'] = ext.soapUIPathWin + '\\testrunner.bat'
 
 
       } else if (org.gradle.internal.os.OperatingSystem.current().macOsX) {
