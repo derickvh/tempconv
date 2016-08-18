@@ -55,7 +55,7 @@
 	<target name="test" depends="deploy" description="Empty TEST target. Must be overriden in importing file.">
 	</target>
 
-	<target name="run.test" depends="multiDeploy"
+	<target name="runTest"
 		description="Uses the SoapUI testrunner command to execute a SoapUI Test Project">
 		<echo message="RUN.TEST target starting ...${line.separator}" />
 		<echo message="Command line: ${soapui.exec} ${soapui.parameters}${line.separator}" />

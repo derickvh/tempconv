@@ -1,5 +1,18 @@
 //build.gradle
 
+repositories {
+     maven { url "http://repo.maven.apache.org/maven2" }
+}
+
+configurations {
+  antClasspath
+}
+
+// dependency for XMLResultAggregator task
+dependencies {
+  antClasspath 'org.apache.ant:ant-junit:1.8.2'
+}
+
 switch (iibEnv) {
 
          case "PROD":
@@ -73,7 +86,7 @@ task multiDeploy() {
 
     brokerElems = value.split(':')
 
-  //Not very elegant, but here goes ...
+    // Not very elegant, but here goes ...
     iNode = brokerElems[0]
     hostName = brokerElems[1]
     Port = brokerElems[2]
@@ -85,6 +98,39 @@ task multiDeploy() {
                 execgroup: iServer)
     }
   }
+}
+
+task runSoapUI {
+
+  doLast {
+
+    runTest
+    soapuiXmlToHtml(projectDir)
+
+  }
+}
+
+//------
+
+// task to perform XSLT transformation of soapUI xml test report to html
+/*
+ * Thanks to ... http://stackoverflow.com/questions/35770615/need-through-guidance-on-gradle-script-to-execute-soapui-project-xmls-and-genera/35774134#35774134
+*/
+
+def soapuiXmlToHtml(resultsDir) {
+
+    def targetDir = new File(resultsDir, 'html')
+
+    ant.taskdef(
+        name: 'junitreport',
+        classname: 'org.apache.tools.ant.taskdefs.optional.junit.XMLResultAggregator',
+        classpath: configurations.antClasspath.asPath
+    )
+
+    ant.junitreport(todir: resultsDir) {
+        fileset(dir: resultsDir, includes: 'TEST-*.xml')
+        report(todir: targetDir, format: "noframes")
+    }
 }
 
 //------
@@ -103,3 +149,4 @@ Properties readPropsFile(File fProps) {
 }
 
 multiDeploy.dependsOn('compile', 'override')
+runSoapUI.dependsOn('multiDeploy')
