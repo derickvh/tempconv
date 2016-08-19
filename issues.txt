@@ -3,14 +3,16 @@ Issues to address
 1. build.gradle
 
 1.1 Properties to set based on value of iibEnv. Only need overrides.properties file?
-1.2 Do we need the functionality to tansform junit XML report to HTML or can we expect TFS to do it?
-1.3 Should soapui parameters be used to set ant properties or should they be passed to ant masterbuild.xml file as macro substitutions?
+1.2 Do we need the functionality to tansform junit XML report to HTML or can we expect TFS to do it? TFS 2015 R2 can import junit XML files.
+1.3 Should soapui parameters be used to set Ant properties or should they be passed to ant masterbuild.xml file as macro substitutions?
 
 2. masterbuild.xml
 
 2.1 Should runTest be converted from a target to a macrodef?
-2.2 Should the deploy target be kept? If not, cascade to rid dependent targets
-2.3 Should the cleanup task be extended to delete *.class and *.jar files?
+2.2 Should the 'deploy' target be kept? If not, cascade to rid dependent targets
+2.3 Should the 'cleanup' task be extended to delete *.class and *.jar files?
 2.4 Should the test target be deleted?
 
 3. build.xml
+
+3.1 Should build.xml and masterbuild.xml be merged?
