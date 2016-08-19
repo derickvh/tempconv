@@ -69,50 +69,53 @@ if (org.gradle.internal.os.OperatingSystem.current().windows) {
 
   ant.importBuild 'build.xml'
 
-  if (soapUIParams != 'None') {
-      soapuiParameters = soapUIParams + ' ' + soapUIProject
-    } else {
-      soapuiParameters = soapUIProject
+  task runSoapUI {
+
+    doLast {
+
+      if (soapUIProject != 'None') {
+
+          soapuiParameters = soapUIParams + ' ' + soapUIProject
+
+          ant.mruntest(soapuiexec: soapuiExec, params: soapuiParameters)
+          soapuiXmlToHtml(projectDir)
+
+      } else {
+          ant.echo('Nothing to do.')
     }
+  }
+}
 
-    task runSoapUI {
 
-      doLast {
+  task multiDeploy() {
 
-        ant.mruntest(soapuiexec: soapuiExec, params: soapuiParameters)
-        soapuiXmlToHtml(projectDir)
-      }
-    }
+    File inFile = file('broker.properties')
+    Properties brokers = readPropsFile(inFile)
 
-    task multiDeploy() {
+    doLast {
 
-      File inFile = file('broker.properties')
-      Properties brokers = readPropsFile(inFile)
+      String[] brokerElems
+      def iNode, hostName, Port, iServer
 
-      doLast {
+      brokers.each{ key, value ->
 
-        String[] brokerElems
-        def iNode, hostName, Port, iServer
+        brokerElems = value.split(':')
 
-        brokers.each{ key, value ->
+        // Not very elegant, but here goes ...
+        iNode = brokerElems[0]
+        hostName = brokerElems[1]
+        Port = brokerElems[2]
+        iServer = brokerElems[3]
 
-          brokerElems = value.split(':')
-
-          // Not very elegant, but here goes ...
-          iNode = brokerElems[0]
-          hostName = brokerElems[1]
-          Port = brokerElems[2]
-          iServer = brokerElems[3]
-
-          ant.mdeploy(inode: iNode,
-                  hostname: hostName,
-                  port: Port,
-                  execgroup: iServer)
-                }
+        ant.mdeploy(inode: iNode,
+                hostname: hostName,
+                port: Port,
+                execgroup: iServer)
               }
             }
+          }
 
-//------ Functions used by tasks below this line ------
+//------ Functions used by default tasks below this line ------
 
 // function to perform XSLT transformation of soapUI xml test report to html
 /*
