@@ -14,7 +14,7 @@
       antClasspath 'org.apache.ant:ant-junit:1.8.2'
     }
 
-def iibEnv, appName, barfileDir, version, integrationNodes, paramsMQSICreateBarfile, soapuiProject, soapuiParameters, soapuiExec
+def iibEnv, appName, barfileDir, version, integrationNodes, paramsMQSICreateBarfile, soapUIProject, soapUIParams, soapuiExec
 
 task loadConfiguration {
 
@@ -30,8 +30,8 @@ task loadConfiguration {
     barfileDir = v.barfileDir
     version = v.version
     paramsMQSICreateBarfile = v.paramsMQSICreateBarfile
-    soapuiProject = v.soapuiProject
-    soapuiParameters = v.soapuiParameters
+    soapUIProject = v.soapUIProject
+    soapUIParams = v.soapUIParams
     integrationNodes = v.integrationNodes
   }
 }
@@ -96,12 +96,12 @@ if (org.gradle.internal.os.OperatingSystem.current().windows) {
 
       if (soapUIProject != 'None') {
 
-        soapuiParameters = soapUIParams + ' ' + soapUIProject
+        def soapuiParameters = soapUIParams + ' ' + soapUIProject
         ant.mruntest(soapuiexec: soapuiExec, params: soapuiParameters)
         //soapuiXmlToHtml(projectDir)
 
       } else {
-        ant.echo('Nothing to do.')
+        ant.echo('Nothing to do ...')
       }
     }
   }
@@ -111,8 +111,6 @@ if (org.gradle.internal.os.OperatingSystem.current().windows) {
       doLast {
 
           integrationNodes.each {name, value ->
-
-          println("${value.host}, ${value.port}, ${value.intNode}, ${value.intServer}")
 
             ant.mdeploy(inode: value.intNode,
                         hostname: value.host,
@@ -145,7 +143,7 @@ def soapuiXmlToHtml(resultsDir) {
     }
 }
 
-//------
+/*
 
 Properties readPropsFile(File fProps) {
 
@@ -159,6 +157,7 @@ Properties readPropsFile(File fProps) {
   fProps.withInputStream { stream -> props.load(stream) }
   return props
 }
+*/
 
 tasks.multiDeploy {
 
